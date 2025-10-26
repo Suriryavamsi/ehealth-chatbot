@@ -22,6 +22,8 @@
 <button onclick="sendMessage()">Send</button>
 
 <script>
+    const contextPath = window.location.pathname.replace(/\/$/, ''); // removes trailing slash
+
     async function sendMessage() {
         const input = document.getElementById('userInput');
         const message = input.value.trim();
@@ -30,11 +32,16 @@
         appendMessage('user', message);
         input.value = '';
 
-        const response = await fetch('/api/chat/message?conversationId=1', {
+        const response = await fetch(`${contextPath}/api/chat/message?conversationId=1`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(message)
         });
+
+        if (!response.ok) {
+            appendMessage('bot', 'Error: ' + response.status + ' ' + response.statusText);
+            return;
+        }
 
         const reply = await response.text();
         appendMessage('bot', reply);
@@ -49,6 +56,7 @@
         chatbox.scrollTop = chatbox.scrollHeight;
     }
 </script>
+
 
 </body>
 </html>

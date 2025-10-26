@@ -16,7 +16,7 @@ public class ChatController {
 
     @PostMapping("/message")
     public ResponseEntity<String> sendMessage(
-            @RequestParam Long conversationId,
+            @RequestParam("conversationId") Long conversationId,
             @RequestBody String message) {
 
         String reply = chatService.handleUserMessage(conversationId, message);
