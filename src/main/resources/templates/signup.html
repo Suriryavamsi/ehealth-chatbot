@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>eHealth Sign Up</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+
+    <div class="register-container">
+        <h2>Sign Up</h2>
+        <input type="text" id="reg-username" placeholder="Username" />
+        <input type="email" id="reg-email" placeholder="Email" />
+        <input type="password" id="reg-password" placeholder="Password" />
+        <select id="reg-role">
+            <option value="PATIENT">Patient</option>
+            <option value="DOCTOR">Doctor</option>
+            <option value="NURSE">Nurse</option>
+        </select>
+        <button type="button" id="registerBtn">Sign Up</button>
+        <p id="reg-error" style="color:red;"></p>
+        <p>Already have an account? <a th:href="@{/login}">Login</a></p>
+    </div>
+
+</div>
+
+<script th:src="@{/js/auth.js}" src="/static/js/auth.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('registerBtn').addEventListener('click', register);
+    });
+</script>
+
+</body>
+</html>

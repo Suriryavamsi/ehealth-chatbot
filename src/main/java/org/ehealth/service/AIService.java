@@ -35,6 +35,10 @@ public class AIService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(apiKey);
 
+        System.out.println("Using model: " + model);
+        System.out.println("API URL: " + apiUrl);
+        System.out.println("API key (first 8 chars): " + apiKey.substring(0, 8));
+
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
         ResponseEntity<Map> response = restTemplate.postForEntity(apiUrl, request, Map.class);

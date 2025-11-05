@@ -1,3 +1,7 @@
+-- =========================
+-- E-Health Assistant MySQL Schema (Updated)
+-- =========================
+
 CREATE DATABASE IF NOT EXISTS ehealth_ai
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
@@ -5,10 +9,8 @@ CREATE DATABASE IF NOT EXISTS ehealth_ai
 USE ehealth_ai;
 
 -- =========================
--- E-Health Assistant MySQL Schema (Updated)
+-- Core Roles & Permissions
 -- =========================
-
--- Core Authentication & Roles
 CREATE TABLE roles (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
@@ -27,21 +29,26 @@ CREATE TABLE role_permissions (
     FOREIGN KEY (permission_id) REFERENCES permissions(id)
 );
 
+-- =========================
+-- Users
+-- =========================
 CREATE TABLE users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
-    role_id BIGINT,
+    role_id BIGINT NOT NULL,
     FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
+-- =========================
 -- User Profiles
+-- =========================
 CREATE TABLE patients (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT UNIQUE,
+    user_id BIGINT UNIQUE NOT NULL,
     name VARCHAR(100),
-    DOB DATE,
+    dob DATE,
     gender ENUM('Male','Female','Other'),
     contact VARCHAR(20),
     address TEXT,
@@ -51,7 +58,7 @@ CREATE TABLE patients (
 
 CREATE TABLE doctors (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT UNIQUE,
+    user_id BIGINT UNIQUE NOT NULL,
     specialization VARCHAR(100),
     reg_no VARCHAR(50) UNIQUE,
     contact VARCHAR(20),
@@ -59,7 +66,17 @@ CREATE TABLE doctors (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+CREATE TABLE nurses (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT UNIQUE NOT NULL,
+    department VARCHAR(50),
+    contact VARCHAR(20),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- =========================
 -- Healthcare Operations
+-- =========================
 CREATE TABLE appointments (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     patient_id BIGINT,
@@ -98,7 +115,9 @@ CREATE TABLE prescription_items (
     FOREIGN KEY (drug_id) REFERENCES medications(id)
 );
 
+-- =========================
 -- Diagnostics
+-- =========================
 CREATE TABLE lab_tests (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -118,7 +137,9 @@ CREATE TABLE lab_results (
     FOREIGN KEY (verified_by) REFERENCES doctors(id)
 );
 
+-- =========================
 -- Chatbot & Conversations
+-- =========================
 CREATE TABLE conversations (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT,
@@ -144,7 +165,9 @@ CREATE TABLE faqs (
     answer TEXT NOT NULL
 );
 
+-- =========================
 -- Compliance & Support
+-- =========================
 CREATE TABLE audit_logs (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT,

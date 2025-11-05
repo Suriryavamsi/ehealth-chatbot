@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nurse Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h2>Nurse Dashboard</h2>
+
+<button onclick="logout()">Logout</button>
+
+<div>
+    <h3>Doctor Appointments</h3>
+    <ul id="doctorAppointments"></ul>
+</div>
+
+<div>
+    <h3>Patient Details</h3>
+    <ul id="patients"></ul>
+</div>
+
+<div>
+    <h3>Chatbot</h3>
+    <div id="chatbox"></div>
+    <input type="text" id="userInput" placeholder="Ask AI..." />
+    <button type="button" onclick="sendMessage()">Send</button>
+</div>
+
+<script th:src="@{/js/chat.js}" src="/static/js/chat.js"></script>
+<script th:inline="javascript">
+    const CONTEXT_PATH = /*[[@{/}]]*/ '/';
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        // Redirect to login if no token
+        window.location.href = CONTEXT_PATH + 'login';
+    }
+
+    // Reusable fetch with JWT
+    async function fetchWithAuth(url, options = {}) {
+        options.headers = {
+            ...(options.headers || {}),
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        };
+        const response = await fetch(url, options);
+        if (response.status === 403) {
+            console.warn('Access denied (403) for', url);
+        }
+        return response;
+    }
+
+    // Load doctor appointments
+    async function loadDoctorAppointments() {
+        try {
+            const response = await fetchWithAuth(`${CONTEXT_PATH}api/nurse/doctor-appointments`);
+            if (!response.ok) throw new Error('Failed to fetch doctor appointments');
+            const data = await response.json();
+            const list = document.getElementById('doctorAppointments');
+            list.innerHTML = '';
+            data.forEach(a => {
+                const li = document.createElement('li');
+                li.textContent = `Dr. ${a.doctor.name} - ${a.datetime} with ${a.patient.name}`;
+                list.appendChild(li);
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    // Load patient details
+    async function loadPatients() {
+        try {
+            const response = await fetchWithAuth(`${CONTEXT_PATH}api/nurse/patients`);
+            if (!response.ok) throw new Error('Failed to fetch patients');
+            const data = await response.json();
+            const list = document.getElementById('patients');
+            list.innerHTML = '';
+            data.forEach(p => {
+                const li = document.createElement('li');
+                li.textContent = `${p.name}, DOB: ${p.dob}, Contact: ${p.contact}`;
+                list.appendChild(li);
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    // Logout function
+    function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        window.location.href = CONTEXT_PATH + 'login';
+    }
+
+    // Initial load
+    loadDoctorAppointments();
+    loadPatients();
+
+</script>
+</body>
+</html>
