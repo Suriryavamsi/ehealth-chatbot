@@ -46,3 +46,9 @@ function appendMessage(sender, text) {
     chatbox.appendChild(div);
     chatbox.scrollTop = chatbox.scrollHeight;
 }
+
+function logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    window.location.href = CONTEXT_PATH + '/login';
+}

@@ -109,10 +109,3 @@ async function fetchWithAuth(url, options = {}) {
 
     return response;
 }
-
-// ===== LOGOUT =====
-function logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    window.location.href = CONTEXT_PATH + '/login';
-}
