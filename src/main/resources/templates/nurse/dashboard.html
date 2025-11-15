@@ -29,7 +29,6 @@
 
 <script th:src="@{/js/chat.js}" src="/static/js/chat.js"></script>
 <script th:inline="javascript">
-    const CONTEXT_PATH = /*[[@{/}]]*/ '/';
     const token = localStorage.getItem('token');
 
     if (!token) {
