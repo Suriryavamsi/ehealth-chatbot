@@ -103,6 +103,7 @@
                     <b>${p.name}</b><br>
                     DOB: ${p.dob}<br>
                     Contact: ${p.contact}
+                    <button class="small-btn" onclick="showLabResults(${p.id})">Lab Results</button>
                 `;
                 list.appendChild(li);
             });
@@ -115,11 +116,11 @@
 
 
     // Load lab results
-    async function loadLabResults() {
+    async function showLabResults(id) {
         const list = document.getElementById('labResults');
 
         try {
-            const res = await fetchWithAuth(`${CONTEXT_PATH}/api/patient/lab-results`);
+            const res = await fetchWithAuth(`${CONTEXT_PATH}/api/nurse/patients/${id}/lab-results`);
             if (!res.ok) throw new Error("Failed");
             const data = await res.json();
 
@@ -196,4 +197,3 @@
     // Initial load
     loadDoctors();
     loadPatients();
-    loadLabResults();
