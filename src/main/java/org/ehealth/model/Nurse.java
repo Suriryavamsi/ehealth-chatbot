@@ -1,5 +1,6 @@
 package org.ehealth.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +30,7 @@ public class Nurse {
             joinColumns = @JoinColumn(name = "nurse_id"),
             inverseJoinColumns = @JoinColumn(name = "patient_id")
     )
+    @JsonIgnore
     private List<Patient> patients;
 
     @ManyToMany
@@ -37,6 +39,7 @@ public class Nurse {
             joinColumns = @JoinColumn(name = "nurse_id"),
             inverseJoinColumns = @JoinColumn(name = "doctor_id")
     )
+    @JsonIgnore
     private List<Doctor> doctors;
 
 }

@@ -118,7 +118,7 @@ const CONTEXT_PATH = "/ehealth-chatbot"; // <-- set your base path if needed
             box.innerHTML = results
                 .map(r => `
                     <div style="margin-bottom: 10px;">
-                        <b>Test:</b> ${r.test}<br>
+                        <b>Test:</b> ${r.test.name}<br>
                         <b>Status:</b> ${r.status}<br>
                         <b>Date:</b> ${r.createdAt}<br>
                     </div>
