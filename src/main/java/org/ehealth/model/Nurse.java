@@ -6,11 +6,12 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Setter
 @Getter
+@Setter
 @Entity
-@Table(name = "doctors")
-public class Doctor {
+@Table(name = "nurses")
+public class Nurse {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,15 +20,10 @@ public class Doctor {
     @JoinColumn(name = "user_id", unique = true)
     private User user;
 
-    private String specialization;
-
-    @Column(unique = true)
-    private String regNo;
-
+    private String department;
     private String contact;
-    private String availability;
 
-    @ManyToMany(mappedBy = "doctors")
+    @ManyToMany(mappedBy = "nurses")
     private List<Patient> patients;
 
 }

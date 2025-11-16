@@ -21,4 +21,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     // Search doctor by name
     @Query("SELECT d FROM Doctor d WHERE d.user.username LIKE %:name% OR d.user.email LIKE %:name%")
     List<Doctor> searchByNameOrEmail(@Param("name") String name);
+
+    List<Doctor> findByPatientsId(Long patientId);
 }

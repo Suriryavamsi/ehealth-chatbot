@@ -50,6 +50,15 @@ public class DoctorController {
         return ResponseEntity.ok(patient);
     }
 
+    @GetMapping("/patients")
+    public ResponseEntity<List<Patient>> getDoctorPatients(Authentication auth){
+        Doctor doctor = doctorRepo.findByUserId(getUserIdFromAuth(auth))
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+        List<Patient> patients = patientRepo.findByDoctorsId(doctor.getId());
+        return ResponseEntity.ok(patients);
+    }
+
     @GetMapping("/patients/{patientId}/lab-results")
     public ResponseEntity<List<LabResult>> getPatientLabResults(@PathVariable Long patientId){
         List<LabResult> results = labRepo.findByPatientId(patientId);

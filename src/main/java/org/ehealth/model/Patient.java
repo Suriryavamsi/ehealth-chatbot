@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.List;
 
 @Setter
 @Getter
@@ -32,4 +33,20 @@ public class Patient {
     public enum Gender {
         Male, Female, Other;
     }
+
+    @ManyToMany
+    @JoinTable(
+            name = "patient_doctors",
+            joinColumns = @JoinColumn(name = "patient_id"),
+            inverseJoinColumns = @JoinColumn(name = "doctor_id")
+    )
+    private List<Doctor> doctors;
+
+    @ManyToMany
+    @JoinTable(
+            name = "patient_nurses",
+            joinColumns = @JoinColumn(name = "patient_id"),
+            inverseJoinColumns = @JoinColumn(name = "nurse_id")
+    )
+    private List<Nurse> nurses;
 }
