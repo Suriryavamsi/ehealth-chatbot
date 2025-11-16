@@ -146,7 +146,7 @@
             const list = document.getElementById('prescriptions');
 
             try {
-                const res = await fetchWithAuth(`${CONTEXT_PATH}/api/nurse/patients/{patientId}/prescriptions`);
+                const res = await fetchWithAuth(`${CONTEXT_PATH}/api/nurse/patients/{id}/prescriptions`);
                 if (!res.ok) throw new Error("Failed");
                 const data = await res.json();
 
