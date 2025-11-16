@@ -87,13 +87,6 @@
         }
     }
 
-    // Logout function
-    function logout() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('role');
-        window.location.href = CONTEXT_PATH + 'login';
-    }
-
     // Initial load
     loadAppointments();
     loadPatients();
