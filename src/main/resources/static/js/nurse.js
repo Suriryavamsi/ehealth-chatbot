@@ -142,30 +142,55 @@
         }
     }
 
-    async function showPrescriptions(id) {
-            const list = document.getElementById('prescriptions');
+async function showPrescriptions(id) {
+    const list = document.getElementById('prescriptions');
 
-            try {
-                const res = await fetchWithAuth(`${CONTEXT_PATH}/api/nurse/patients/${id}/prescriptions`);
-                if (!res.ok) throw new Error("Failed");
-                const data = await res.json();
+    try {
+        const res = await fetchWithAuth(`${CONTEXT_PATH}/api/nurse/patients/${id}/prescriptions`);
+        if (!res.ok) throw new Error("Failed");
+        const prescriptions = await res.json();
 
-                list.innerHTML = "";
-                data.forEach(r => {
-                    const li = document.createElement("li");
-                    li.innerHTML = `
-                        <b>${r.items.medication.name}</b><br>
-                        DosageForm: ${r.items.medication.dosageForm}<br>
-                        Strength: ${r.items.medication.strength}<br>
+        list.innerHTML = "";
 
-                    `;
-                    list.appendChild(li);
-                });
-
-            } catch (err) {
-                list.innerHTML = "<li>Error loading prescriptions</li>";
-            }
+        if (prescriptions.length === 0) {
+            list.innerHTML = "<li>No prescriptions found</li>";
+            return;
         }
+
+        prescriptions.forEach(p => {
+            const wrapper = document.createElement("li");
+
+            let html = `
+                <b>Prescription Date:</b> ${p.date}<br>
+                <b>Doctor:</b> ${p.doctor.user.email} (${p.doctor.specialization})<br><br>
+                <b>Medications:</b><br>
+                <ul>
+            `;
+
+            p.items.forEach(item => {
+                html += `
+                    <li>
+                        <b>${item.medication.name}</b><br>
+                        Dosage Form: ${item.medication.dosageForm}<br>
+                        Strength: ${item.medication.strength}<br>
+                        Dosage: ${item.dosage}<br>
+                        Frequency: ${item.frequency}<br>
+                        Duration: ${item.duration}<br>
+                    </li>
+                `;
+            });
+
+            html += "</ul>";
+
+            wrapper.innerHTML = html;
+            list.appendChild(wrapper);
+        });
+
+    } catch (err) {
+        console.error(err);
+        list.innerHTML = "<li>Error loading prescriptions</li>";
+    }
+}
 
     async function sendMessage(conversationId = 1) {
         const input = document.getElementById('userInput');
