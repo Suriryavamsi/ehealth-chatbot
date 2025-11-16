@@ -30,8 +30,8 @@ public class Doctor {
     @ManyToMany
     @JoinTable(
             name = "patient_doctors",
-            joinColumns = @JoinColumn(name = "patient_id"),
-            inverseJoinColumns = @JoinColumn(name = "doctor_id")
+            joinColumns = @JoinColumn(name = "doctor_id"),
+            inverseJoinColumns = @JoinColumn(name = "patient_id")
     )
     private List<Patient> patients;
 
