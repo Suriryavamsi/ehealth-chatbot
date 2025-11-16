@@ -128,10 +128,10 @@
             data.forEach(r => {
                 const li = document.createElement("li");
                 li.innerHTML = `
-                    <b>${r.testName}</b><br>
+                    <b>${r.test.name}</b><br>
                     Value: ${r.value}<br>
                     Status: ${r.status}<br>
-                    Date: ${r.date}
+                    Date: ${r.createdAt}
                 `;
                 list.appendChild(li);
             });
