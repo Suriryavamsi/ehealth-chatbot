@@ -1,12 +1,10 @@
 package org.ehealth.controller;
 
-import org.ehealth.model.Appointment;
-import org.ehealth.model.LabResult;
-import org.ehealth.model.Patient;
-import org.ehealth.model.User;
+import org.ehealth.model.*;
 import org.ehealth.repository.AppointmentRepository;
 import org.ehealth.repository.LabResultsRepository;
 import org.ehealth.repository.PatientRepository;
+import org.ehealth.repository.PrescriptionRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,13 +19,15 @@ public class PatientController {
     private final PatientRepository patientRepo;
     private final AppointmentRepository appointmentRepo;
     private final LabResultsRepository labRepo;
+    private final PrescriptionRepository prescriptionRepo;
 
     public PatientController(PatientRepository patientRepo,
                              AppointmentRepository appointmentRepo,
-                             LabResultsRepository labRepo){
+                             LabResultsRepository labRepo, PrescriptionRepository prescriptionRepo){
         this.patientRepo = patientRepo;
         this.appointmentRepo = appointmentRepo;
         this.labRepo = labRepo;
+        this.prescriptionRepo = prescriptionRepo;
     }
 
     // ---------------- Patient Profile ----------------
@@ -67,6 +67,15 @@ public class PatientController {
 
         List<LabResult> results = labRepo.findByPatientId(patient.getId());
         return ResponseEntity.ok(results);
+    }
+
+    @GetMapping("/prescriptions")
+    public ResponseEntity<List<Prescription>> getPrescriptions(Authentication auth) {
+        Long userId = getUserIdFromAuth(auth);
+        Patient patient = patientRepo.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
+        List<Prescription> prescriptions = prescriptionRepo.findByPatientId(patient.getId());
+        return ResponseEntity.ok(prescriptions);
     }
 
     // ---------------- Helper Method ----------------

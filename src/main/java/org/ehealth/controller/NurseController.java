@@ -1,10 +1,7 @@
 package org.ehealth.controller;
 
 import org.ehealth.model.*;
-import org.ehealth.repository.AppointmentRepository;
-import org.ehealth.repository.LabResultsRepository;
-import org.ehealth.repository.NurseRepository;
-import org.ehealth.repository.PatientRepository;
+import org.ehealth.repository.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -19,14 +16,16 @@ public class NurseController {
     private final PatientRepository patientRepo;
     private final NurseRepository nurseRepository;
     private final LabResultsRepository labRepo;
+    private final PrescriptionRepository prescriptionRepo;
 
     public NurseController(AppointmentRepository appointmentRepo,
                            PatientRepository patientRepo,
-                           NurseRepository nurseRepository, LabResultsRepository labRepo){
+                           NurseRepository nurseRepository, LabResultsRepository labRepo, PrescriptionRepository prescriptionRepo){
         this.appointmentRepo = appointmentRepo;
         this.patientRepo = patientRepo;
         this.nurseRepository = nurseRepository;
         this.labRepo = labRepo;
+        this.prescriptionRepo = prescriptionRepo;
     }
 
     @GetMapping("/appointments")
@@ -63,6 +62,12 @@ public class NurseController {
     public ResponseEntity<List<LabResult>> getPatientLabResults(@PathVariable Long patientId){
         List<LabResult> results = labRepo.findByPatientId(patientId);
         return ResponseEntity.ok(results);
+    }
+
+    @GetMapping("/patients/{patientId}/prescriptions")
+    public ResponseEntity<List<Prescription>> getPrescriptions(@PathVariable Long patientId) {
+        List<Prescription> prescriptions = prescriptionRepo.findByPatientId(patientId);
+        return ResponseEntity.ok(prescriptions);
     }
 
     private Long getUserIdFromAuth(Authentication auth){

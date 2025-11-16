@@ -104,6 +104,7 @@
                     DOB: ${p.dob}<br>
                     Contact: ${p.contact}
                     <button class="small-btn" onclick="showLabResults(${p.id})">Lab Results</button>
+                    <button class="small-btn" onclick="showPrescriptions(${p.id})">Prescription</button>
                 `;
                 list.appendChild(li);
             });
@@ -140,6 +141,31 @@
             list.innerHTML = "<li>Error loading lab results</li>";
         }
     }
+
+    async function showPrescriptions(id) {
+            const list = document.getElementById('prescriptions');
+
+            try {
+                const res = await fetchWithAuth(`${CONTEXT_PATH}/api/nurse/patients/{patientId}/prescriptions`);
+                if (!res.ok) throw new Error("Failed");
+                const data = await res.json();
+
+                list.innerHTML = "";
+                data.forEach(r => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `
+                        <b>${r.items.medication.name}</b><br>
+                        DosageForm: ${r.items.medication.dosageForm}<br>
+                        Strength: ${r.items.medication.strength}<br>
+
+                    `;
+                    list.appendChild(li);
+                });
+
+            } catch (err) {
+                list.innerHTML = "<li>Error loading prescriptions</li>";
+            }
+        }
 
     async function sendMessage(conversationId = 1) {
         const input = document.getElementById('userInput');
