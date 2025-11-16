@@ -56,7 +56,7 @@
 
         try {
             const res = await fetchWithAuth(
-                `${CONTEXT_PATH}api/nurse/appointments?doctorId=${doctorId}`
+                `${CONTEXT_PATH}/api/nurse/appointments?doctorId=${doctorId}`
             );
             if (!res.ok) throw new Error();
 
