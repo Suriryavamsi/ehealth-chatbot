@@ -1,5 +1,6 @@
 package org.ehealth.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +32,7 @@ public class LabResult {
 
     @ManyToOne
     @JoinColumn(name = "verified_by")
+    @JsonIgnore
     private Doctor verifiedBy;
 
     @Column(name = "created_at")
