@@ -33,7 +33,9 @@ const CONTEXT_PATH = "/ehealth-chatbot"; // If you have a context root, set here
                 const li = document.createElement("li");
                 li.innerHTML = `
                     <b>${a.datetime}</b><br>
-                    Doctor: ${a.doctor?.user?.name ?? "Unknown"}<br>
+                    Doctor: ${a.doctor.user.email ?? "Unknown"}<br>
+                    Specialization: ${a.doctor.specialization ?? "Unknown"}<br>
+                    Contact: ${a.doctor.contact ?? "Unknown"}<br>
                     Status: ${a.status}
                 `;
                 list.appendChild(li);
@@ -57,10 +59,10 @@ const CONTEXT_PATH = "/ehealth-chatbot"; // If you have a context root, set here
             data.forEach(r => {
                 const li = document.createElement("li");
                 li.innerHTML = `
-                    <b>${r.testName}</b><br>
+                    <b>${r.test.name}</b><br>
                     Value: ${r.value}<br>
                     Status: ${r.status}<br>
-                    Date: ${r.date}
+                    Date: ${r.createdAt}
                 `;
                 list.appendChild(li);
             });
