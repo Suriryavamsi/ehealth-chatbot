@@ -50,7 +50,7 @@ public class PatientController {
         Patient patient = patientRepo.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
 
-        List<Appointment> appointments = appointmentRepo.findByPatientId(patient.getUser().getId());
+        List<Appointment> appointments = appointmentRepo.findByPatientId(patient.getId());
         return ResponseEntity.ok(appointments);
     }
 
@@ -65,7 +65,7 @@ public class PatientController {
         Patient patient = patientRepo.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
 
-        List<LabResult> results = labRepo.findByPatientId(patient.getUser().getId());
+        List<LabResult> results = labRepo.findByPatientId(patient.getId());
         return ResponseEntity.ok(results);
     }
 
