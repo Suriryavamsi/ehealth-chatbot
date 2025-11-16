@@ -33,7 +33,7 @@
             doctors.forEach(d => {
                 const opt = document.createElement("option");
                 opt.value = d.id;
-                opt.textContent = d.user.name + " (" + d.specialization + ")";
+                opt.textContent = d.user.email + " (" + d.specialization + ")";
                 select.appendChild(opt);
             });
 
@@ -196,3 +196,4 @@
     // Initial load
     loadDoctors();
     loadPatients();
+    loadLabResults();
