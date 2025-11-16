@@ -1,5 +1,6 @@
 package org.ehealth.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ public class PrescriptionItem {
 
     @ManyToOne
     @JoinColumn(name = "prescription_id")
+    @JsonIgnore
     private Prescription prescription;
 
     @ManyToOne
