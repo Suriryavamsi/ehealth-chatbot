@@ -27,7 +27,20 @@ public class Doctor {
     private String contact;
     private String availability;
 
-    @ManyToMany(mappedBy = "doctors")
+    @ManyToMany
+    @JoinTable(
+            name = "patient_doctors",
+            joinColumns = @JoinColumn(name = "patient_id"),
+            inverseJoinColumns = @JoinColumn(name = "doctor_id")
+    )
     private List<Patient> patients;
+
+    @ManyToMany
+    @JoinTable(
+            name = "doctor_nurses",
+            joinColumns = @JoinColumn(name = "doctor_id"),
+            inverseJoinColumns = @JoinColumn(name = "nurse_id")
+    )
+    private List<Nurse> nurses;
 
 }

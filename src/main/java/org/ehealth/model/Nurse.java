@@ -23,7 +23,20 @@ public class Nurse {
     private String department;
     private String contact;
 
-    @ManyToMany(mappedBy = "nurses")
+    @ManyToMany
+    @JoinTable(
+            name = "patient_nurses",
+            joinColumns = @JoinColumn(name = "nurse_id"),
+            inverseJoinColumns = @JoinColumn(name = "patient_id")
+    )
     private List<Patient> patients;
+
+    @ManyToMany
+    @JoinTable(
+            name = "doctor_nurses",
+            joinColumns = @JoinColumn(name = "nurse_id"),
+            inverseJoinColumns = @JoinColumn(name = "doctor_id")
+    )
+    private List<Doctor> doctors;
 
 }

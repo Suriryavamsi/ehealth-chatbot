@@ -4,92 +4,58 @@
     <meta charset="UTF-8">
     <title>Nurse Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .section {
+            background: #fff; padding: 15px; margin-bottom: 20px;
+            border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        ul { list-style: none; padding: 0; }
+        li {
+            background: #fafafa; padding: 10px; margin-bottom: 6px;
+            border-radius: 5px; border: 1px solid #ddd;
+        }
+        button {
+            background: #0066cc; color: white; border: none;
+            padding: 8px 12px; cursor: pointer; border-radius: 5px;
+        }
+        button:hover { background: #004a99; }
+        select { padding: 6px; }
+    </style>
 </head>
-<body>
-<h2>Nurse Dashboard</h2>
 
+<body>
+
+<h2>Nurse Dashboard</h2>
 <button onclick="logout()">Logout</button>
 
-<div>
+<!-- Doctor Appointments -->
+<div class="section">
     <h3>Doctor Appointments</h3>
-    <ul id="doctorAppointments"></ul>
+
+    <label>Select Doctor:</label>
+    <select id="doctorSelect" onchange="loadDoctorAppointments()">
+        <option value="">-- Choose Doctor --</option>
+    </select>
+
+    <ul id="doctorAppointments">Select a doctor to view appointments...</ul>
 </div>
 
-<div>
+<!-- Patients -->
+<div class="section">
     <h3>Patient Details</h3>
-    <ul id="patients"></ul>
+    <ul id="patients">Loading...</ul>
 </div>
 
-<div>
+<!-- Chatbot -->
+<div class="section">
     <h3>Chatbot</h3>
     <div id="chatbox"></div>
     <input type="text" id="userInput" placeholder="Ask AI..." />
     <button type="button" onclick="sendMessage()">Send</button>
 </div>
 
-<script th:src="@{/js/chat.js}" src="/static/js/chat.js"></script>
-<script th:inline="javascript">
-    const token = localStorage.getItem('token');
+<script th:src="@{/js/nurse.js}" src="/static/js/nurse.js"></script>
 
-    if (!token) {
-        // Redirect to login if no token
-        window.location.href = CONTEXT_PATH + 'login';
-    }
-
-    // Reusable fetch with JWT
-    async function fetchWithAuth(url, options = {}) {
-        options.headers = {
-            ...(options.headers || {}),
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-        };
-        const response = await fetch(url, options);
-        if (response.status === 403) {
-            console.warn('Access denied (403) for', url);
-        }
-        return response;
-    }
-
-    // Load doctor appointments
-    async function loadDoctorAppointments() {
-        try {
-            const response = await fetchWithAuth(`${CONTEXT_PATH}api/nurse/doctor-appointments`);
-            if (!response.ok) throw new Error('Failed to fetch doctor appointments');
-            const data = await response.json();
-            const list = document.getElementById('doctorAppointments');
-            list.innerHTML = '';
-            data.forEach(a => {
-                const li = document.createElement('li');
-                li.textContent = `Dr. ${a.doctor.name} - ${a.datetime} with ${a.patient.name}`;
-                list.appendChild(li);
-            });
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    // Load patient details
-    async function loadPatients() {
-        try {
-            const response = await fetchWithAuth(`${CONTEXT_PATH}api/nurse/patients`);
-            if (!response.ok) throw new Error('Failed to fetch patients');
-            const data = await response.json();
-            const list = document.getElementById('patients');
-            list.innerHTML = '';
-            data.forEach(p => {
-                const li = document.createElement('li');
-                li.textContent = `${p.name}, DOB: ${p.dob}, Contact: ${p.contact}`;
-                list.appendChild(li);
-            });
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    // Initial load
-    loadDoctorAppointments();
-    loadPatients();
-
-</script>
 </body>
 </html>

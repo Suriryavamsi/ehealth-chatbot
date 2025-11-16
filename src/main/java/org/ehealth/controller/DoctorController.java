@@ -51,7 +51,7 @@ public class DoctorController {
     }
 
     @GetMapping("/patients")
-    public ResponseEntity<List<Patient>> getDoctorPatients(Authentication auth){
+    public ResponseEntity<List<Patient>> getPatients(Authentication auth){
         Doctor doctor = doctorRepo.findByUserId(getUserIdFromAuth(auth))
                 .orElseThrow(() -> new RuntimeException("Doctor not found"));
 
@@ -64,6 +64,8 @@ public class DoctorController {
         List<LabResult> results = labRepo.findByPatientId(patientId);
         return ResponseEntity.ok(results);
     }
+
+
 
     private Long getUserIdFromAuth(Authentication auth){
         // Implement a method to fetch User ID from Authentication principal

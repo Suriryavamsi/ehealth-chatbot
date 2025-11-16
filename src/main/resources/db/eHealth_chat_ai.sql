@@ -77,7 +77,7 @@ CREATE TABLE nurses (
 -- =========================
 -- Healthcare Operations
 -- =========================
-CREATE TABLE appointments (
+CREATE TABLE appointment (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     patient_id BIGINT,
     doctor_id BIGINT,
@@ -88,7 +88,7 @@ CREATE TABLE appointments (
     FOREIGN KEY (doctor_id) REFERENCES doctors(id)
 );
 
-CREATE TABLE medications (
+CREATE TABLE medication (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     dosage_form VARCHAR(50),
@@ -140,7 +140,7 @@ CREATE TABLE lab_results (
 -- =========================
 -- Chatbot & Conversations
 -- =========================
-CREATE TABLE conversations (
+CREATE TABLE conversation (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT,
     type ENUM('Chatbot','Doctor'),
@@ -148,7 +148,7 @@ CREATE TABLE conversations (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-CREATE TABLE messages (
+CREATE TABLE message (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     conversation_id BIGINT,
     sender VARCHAR(50),

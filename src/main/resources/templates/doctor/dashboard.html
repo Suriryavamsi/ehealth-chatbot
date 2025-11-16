@@ -3,93 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <title>Doctor Dashboard</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-</head>
-<body>
-<h2>Doctor Dashboard</h2>
 
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f7f7f7; }
+        h2 { margin-bottom: 10px; }
+        .section {
+            background: #fff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+        }
+        ul { list-style: none; padding: 0; }
+        li {
+            padding: 8px;
+            margin-bottom: 6px;
+            background: #fafafa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+            background: #0066cc;
+            border: none;
+            color: white;
+            border-radius: 5px;
+        }
+        button:hover { background: #004c99; }
+        .small-btn {
+            margin-left: 10px;
+            padding: 3px 8px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Doctor Dashboard</h2>
 <button onclick="logout()">Logout</button>
 
-<div>
+<!-- Appointments -->
+<div class="section">
     <h3>Appointments</h3>
+    <div id="appointments-loading">Loading appointments...</div>
     <ul id="appointments"></ul>
 </div>
 
-<div>
+<!-- Patients -->
+<div class="section">
     <h3>Patients</h3>
+    <div id="patients-loading">Loading patients...</div>
     <ul id="patients"></ul>
 </div>
 
-<div>
+<!-- Patient Details -->
+<div class="section">
+    <h3>Patient Details</h3>
+    <div id="patient-details">Select a patient...</div>
+</div>
+
+<!-- Lab Results -->
+<div class="section">
+    <h3>Lab Results</h3>
+    <div id="lab-results">Select a patient...</div>
+</div>
+
+<!-- Chatbot -->
+<div class="section">
     <h3>Chatbot</h3>
     <div id="chatbox"></div>
     <input type="text" id="userInput" placeholder="Ask AI..." />
     <button type="button" onclick="sendMessage()">Send</button>
 </div>
 
-<script th:src="@{/js/chat.js}" src="/static/js/chat.js"></script>
-<script th:inline="javascript">
+<script th:src="@{/js/doctor.js}" src="/static/js/doctor.js"></script>
 
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-        // Redirect to login if token is missing
-        window.location.href = CONTEXT_PATH + 'login';
-    }
-
-    // Reusable fetch function with JWT header
-    async function fetchWithAuth(url, options = {}) {
-        options.headers = {
-            ...(options.headers || {}),
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-        };
-        const response = await fetch(url, options);
-        if (response.status === 403) {
-            console.warn('Access denied (403) for', url);
-        }
-        return response;
-    }
-
-    // Load doctor appointments
-    async function loadAppointments() {
-        try {
-            const response = await fetchWithAuth(`${CONTEXT_PATH}/api/doctor/appointments`);
-            if (!response.ok) throw new Error('Failed to fetch appointments');
-            const data = await response.json();
-            const list = document.getElementById('appointments');
-            list.innerHTML = '';
-            data.forEach(a => {
-                const li = document.createElement('li');
-                li.textContent = `${a.datetime} - Patient: ${a.patient.name}`;
-                list.appendChild(li);
-            });
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    // Load patients
-    async function loadPatients() {
-        try {
-            const response = await fetchWithAuth(`${CONTEXT_PATH}/api/doctor/patients`);
-            if (!response.ok) throw new Error('Failed to fetch patients');
-            const data = await response.json();
-            const list = document.getElementById('patients');
-            list.innerHTML = '';
-            data.forEach(p => {
-                const li = document.createElement('li');
-                li.textContent = `${p.name} - DOB: ${p.dob}`;
-                list.appendChild(li);
-            });
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    // Initial load
-    loadAppointments();
-    loadPatients();
-</script>
 </body>
 </html>
